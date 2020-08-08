@@ -3,10 +3,6 @@
   "version": "1.0.0",
   "description": "a link shortener",
   "main": "index.js",
-  "scripts": {
-    "devStart": "nodemon server.js",
-    "start": "node server.js"
-  },
   "author": "Laxya Pahuja",
   "license": "ISC",
   "dependencies": {
