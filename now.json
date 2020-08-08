@@ -1,9 +1,4 @@
-{
-    "builds": [{
-        "src": "server.js",
-        "use": "@now/node-server"
-    }],
-    
+{  
     "routes": [{
         "headers": {
             "Access-Control-Allow-Origin": "*",
@@ -11,6 +6,6 @@
             "Access-Control-Allow-Headers": "X-Requested-With, Content-Type, Accept"
         },
         "src": "/.*",
-        "dest": "/server.js"
+        "dest": "/index.js"
     }]
-    }
+}
