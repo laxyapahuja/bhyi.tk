@@ -4,6 +4,10 @@
   "description": "a link shortener",
   "main": "index.js",
   "author": "Laxya Pahuja",
+  "scripts": {
+    "devStart": "nodemon index.js",
+    "start": "node index.js"
+  },
   "license": "ISC",
   "dependencies": {
     "dotenv": "^8.2.0",

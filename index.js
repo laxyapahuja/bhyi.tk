@@ -18,18 +18,6 @@ app.get('/', (req, res) => {
     res.render('index', {"error":""})
 })
 
-app.post('/captcha', async (req, res) => {
-    const secretKey = process.env.CAPTCHA_SECRET;
-    const verificationURL = "https://www.google.com/recaptcha/api/siteverify?secret=" + secretKey + "&amp;response=" + req.body['g-recaptcha-response'] + "&amp;remoteip=" + req.connection.remoteAddress;
-    request(verificationURL,function(error,response,body) {
-      body = JSON.parse(body);
-      if(body.success !== undefined) {
-        return res.json({"responseError" : "Failed captcha verification"});
-      }
-      res.json({"responseSuccess" : "Sucess"});
-    });
-});
-
 app.post('/shortUrls', async (req, res) => {
     const secret_key = process.env.CAPTCHA_SECRET;
 	const response = req.body["g-recaptcha-response"];
@@ -44,13 +32,15 @@ app.post('/shortUrls', async (req, res) => {
 		});
 		const responseJSON = await response.json();
 		if (responseJSON.success) {
-            if (ShortUrl.findOne({ short: req.body.shortUrl})) {
+            const shortUrl = await ShortUrl.findOne({ short: req.body.shortUrl})
+            console.log(shortUrl)
+            if (shortUrl != null) {
                 res.render('index', {"error": "URL already exists."})
             } else {
             await ShortUrl.create({full: req.body.fullUrl, short: req.body.shortUrl});
             console.log('SUCCESS')
             }
-            res.redirect('/')
+            res.render('index', {"error":""})
         } else {
             console.log('ERROR')
         }
@@ -70,4 +60,8 @@ app.get('/:shortUrl', async (req, res) => {
     res.redirect(shortUrl.full)
 })
 
-app.listen(process.env.PORT || 5000)
+const port = process.env.PORT || 3000
+app.listen(port, (err) => {
+  console.log(`Shortener listening on ${port}!`)
+  if (err) throw err
+})
