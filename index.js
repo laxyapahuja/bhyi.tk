@@ -18,7 +18,7 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: false }))
 
 app.get('/', createAccountLimiter, (req, res) => {
-    res.render('index', {"message":""})
+    return res.render('index', {"message":""})
 })
 
 app.post('/shortUrls', createAccountLimiter, async (req, res) => {
@@ -38,12 +38,16 @@ app.post('/shortUrls', createAccountLimiter, async (req, res) => {
             const shortUrl = await ShortUrl.findOne({ short: req.body.shortUrl})
             console.log(shortUrl)
             if (shortUrl != null) {
-                res.render('index', {"message": "URL already exists."})
-            } else {
+                return res.render('index', {"message": "URL already exists."})
+            }
+		if(!shortUrl.match(/^[a-zA-Z]+?[^\\\/:*?"<>|\n\r]+$/)){
+			return res.render('index', {"message": "Doesn't seem like a valid custom URL"});
+		}
+		else {
             await ShortUrl.create({full: req.body.fullUrl, short: req.body.shortUrl});
             console.log('SUCCESS')
             }
-            res.render('index', {"message":"URL successfully shortened."})
+            return res.render('index', {"message":"URL successfully shortened."})
         } else {
             console.log('ERROR')
         }
@@ -60,7 +64,7 @@ app.get('/:shortUrl', createAccountLimiter, async (req, res) => {
     shortUrl.clicks++
     shortUrl.save()
 
-    res.redirect(shortUrl.full)
+    return res.status(201).redirect(shortUrl.full)
 })
 
 const port = process.env.PORT || 3000
