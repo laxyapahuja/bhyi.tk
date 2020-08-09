@@ -5,7 +5,7 @@ const fetch = require("node-fetch")
 const ShortUrl = require('./models/shortUrl')
 const bodyParser = require('body-parser')
 const app = express()
-import { rateLimiterUsingThirdParty } from './rateLimiter'
+const limiter = require('./rateLimiter')
 
 mongoose.connect(process.env.DB_URL, {
     useNewUrlParser: true,
@@ -14,10 +14,9 @@ mongoose.connect(process.env.DB_URL, {
 
 app.set('view engine', 'ejs')
 app.use(express.urlencoded({ extended: false}))
-app.use(rateLimiterUsingThirdParty)
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use()
+app.use(limiter)
 
 app.get('/', (req, res) => {
     res.render('index', {"message":""})

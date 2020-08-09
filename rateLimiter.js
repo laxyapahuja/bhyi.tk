@@ -1,10 +1,8 @@
-import rateLimit from 'express-rate-limit';
+const rateLimit = require('express-rate-limit')
 
-export const rateLimiterUsingThirdParty = rateLimit({
-  windowMs: 60 * 1000, 
-  max: 30,
-  message: 'You have exceeded the 30 requests in 1 minute limit!', 
-  headers: true,
+const limiter = rateLimit({
+    windowMs: 60 * 1000, // 15 minutes
+    max: 30 // limit each IP to 100 requests per windowMs
 });
 
-module.exports = rateLimiterUsingThirdParty
+module.exports = limiter
