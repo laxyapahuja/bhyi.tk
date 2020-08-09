@@ -40,10 +40,10 @@ app.post('/shortUrls', createAccountLimiter, async (req, res) => {
             if (shortUrl != null) {
                 return res.render('index', {"message": "URL already exists."})
             }
-		if(!shortUrl.match(/^[a-zA-Z]+?[^\\\/:*?"<>|\n\r]+$/)){
+		if(!req.body.shortUrl.match(/^[a-zA-Z]+?[^\\\/:*?"<>|\n\r]+$/)){
 			return res.render('index', {"message": "Doesn't seem like a valid custom URL"});
 		}
-	if(!req.body.fullUrl.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g)) {
+	if(req.body.fullUrl == /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g) {
 		return res.render('index', {"message": "Please enter an actual URL to be shortened."});
 	}
 		else {
