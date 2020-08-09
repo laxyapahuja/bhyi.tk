@@ -16,7 +16,7 @@ app.set('view engine', 'ejs')
 app.use(express.urlencoded({ extended: false}))
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use(limiter)
+// app.use(limiter)
 
 app.get('/', (req, res) => {
     res.render('index', {"message":""})
