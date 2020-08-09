@@ -43,6 +43,10 @@ app.post('/shortUrls', createAccountLimiter, async (req, res) => {
 		if(!shortUrl.match(/^[a-zA-Z]+?[^\\\/:*?"<>|\n\r]+$/)){
 			return res.render('index', {"message": "Doesn't seem like a valid custom URL"});
 		}
+	if(!req.body.fullUrl.match(/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)
+/)){
+		return res.render('index', {"message": "Please enter an actual URL to be shortened."});
+	}
 		else {
             await ShortUrl.create({full: req.body.fullUrl, short: req.body.shortUrl});
             console.log('SUCCESS')
