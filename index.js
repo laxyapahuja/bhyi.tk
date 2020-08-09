@@ -3,6 +3,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const fetch = require("node-fetch")
 const ShortUrl = require('./models/shortUrl')
+const bodyParser = require('body-parser')
 const app = express()
 
 mongoose.connect(process.env.DB_URL, {
@@ -13,6 +14,7 @@ mongoose.connect(process.env.DB_URL, {
 app.set('view engine', 'ejs')
 app.use(express.urlencoded({ extended: false}))
 app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.urlencoded({ extended: false }))
 
 app.get('/', (req, res) => {
     res.render('index', {"error":""})
