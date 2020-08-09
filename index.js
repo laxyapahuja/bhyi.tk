@@ -5,7 +5,7 @@ const fetch = require("node-fetch")
 const ShortUrl = require('./models/shortUrl')
 const bodyParser = require('body-parser')
 const app = express()
-const limiter = require('./rateLimiter')
+const createAccountLimiter = require('./rateLimiter')
 
 mongoose.connect(process.env.DB_URL, {
     useNewUrlParser: true,
@@ -16,13 +16,12 @@ app.set('view engine', 'ejs')
 app.use(express.urlencoded({ extended: false}))
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use(limiter)
 
-app.get('/', (req, res) => {
+app.get('/', createAccountLimiter, (req, res) => {
     res.render('index', {"message":""})
 })
 
-app.post('/shortUrls', async (req, res) => {
+app.post('/shortUrls', createAccountLimiter, async (req, res) => {
     const secret_key = process.env.CAPTCHA_SECRET;
 	const response = req.body["g-recaptcha-response"];
 	const url = `https://www.google.com/recaptcha/api/siteverify?secret=${secret_key}&response=${response}`;
@@ -54,7 +53,7 @@ app.post('/shortUrls', async (req, res) => {
     }
 })
 
-app.get('/:shortUrl', async (req, res) => {
+app.get('/:shortUrl', createAccountLimiter, async (req, res) => {
     const shortUrl = await ShortUrl.findOne({ short: req.params.shortUrl})
     if (shortUrl == null) return res.sendStatus(404)
 
