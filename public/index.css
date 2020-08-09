@@ -72,8 +72,8 @@ a:hover {
     color: #888888;
 }
 
-.error {
-    color: #e74c3c;
+.message {
+    color: white;
 }
 
 @font-face {

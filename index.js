@@ -17,7 +17,7 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({ extended: false }))
 
 app.get('/', (req, res) => {
-    res.render('index', {"error":""})
+    res.render('index', {"message":""})
 })
 
 app.post('/shortUrls', async (req, res) => {
@@ -37,12 +37,12 @@ app.post('/shortUrls', async (req, res) => {
             const shortUrl = await ShortUrl.findOne({ short: req.body.shortUrl})
             console.log(shortUrl)
             if (shortUrl != null) {
-                res.render('index', {"error": "URL already exists."})
+                res.render('index', {"message": "URL already exists."})
             } else {
             await ShortUrl.create({full: req.body.fullUrl, short: req.body.shortUrl});
             console.log('SUCCESS')
             }
-            res.render('index', {"error":""})
+            res.render('index', {"message":"URL successfully shortened."})
         } else {
             console.log('ERROR')
         }
