@@ -39,20 +39,22 @@ app.post('/shortUrls', createAccountLimiter, async (req, res) => {
             console.log(shortUrl)
             if (shortUrl != null) {
                 return res.render('index', {"message": "URL already exists."})
-            }
+        }
 		if(!req.body.shortUrl.match(/^[a-zA-Z]+?[^\\\/:*?"<>|\n\r]+$/)){
 			return res.render('index', {"message": "Doesn't seem like a valid custom URL"});
 		}
-	if(req.body.fullUrl == /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g) {
+	    if(req.body.fullUrl == /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g) {
 		return res.render('index', {"message": "Please enter an actual URL to be shortened."});
-	}
-		else {
-            await ShortUrl.create({full: req.body.fullUrl, short: req.body.shortUrl});
-            console.log('SUCCESS')
+	    } else {
+            var https = require('https');
+            https.get(req.body.fullUrl, async function (response) {
+                await ShortUrl.create({full: req.body.fullUrl, short: req.body.shortUrl});
+                console.log('SUCCESS')
+                return res.render('index', {"message":"URL successfully shortened."})
+            }).on('error', function(e) {
+                return res.render('index', {'message':'The URL is not valid.'})
+            });;
             }
-            return res.render('index', {"message":"URL successfully shortened."})
-        } else {
-            console.log('ERROR')
         }
     }
     catch (error) {
@@ -62,6 +64,10 @@ app.post('/shortUrls', createAccountLimiter, async (req, res) => {
 
 app.get('/test', async (req, res) => {
     res.sendFile(__dirname+'/public/test.js')
+})
+
+app.get('/shortUrls', async (req, res) => {
+    return res.render('index', {'message': ''})
 })
 
 app.get('/:shortUrl', createAccountLimiter, async (req, res) => {
