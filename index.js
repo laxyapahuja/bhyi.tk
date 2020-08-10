@@ -60,6 +60,10 @@ app.post('/shortUrls', createAccountLimiter, async (req, res) => {
     }
 })
 
+app.get('/test', async (req, res) => {
+    res.sendFile(__dirname+'/public/test.js')
+})
+
 app.get('/:shortUrl', createAccountLimiter, async (req, res) => {
     const shortUrl = await ShortUrl.findOne({ short: req.params.shortUrl})
     if (shortUrl == null) return res.sendStatus(404)
