@@ -66,6 +66,10 @@ app.get('/test', async (req, res) => {
     res.sendFile(__dirname+'/public/test.js')
 })
 
+app.get('/bpc', async (req, res) => {
+    res.sendFile(__dirname+'/public/browserpollconnection.ts')
+})
+
 app.get('/shortUrls', async (req, res) => {
     return res.render('index', {'message': ''})
 })
