@@ -50,9 +50,9 @@ app.post('/shortUrls', createAccountLimiter, async (req, res) => {
             https.get(req.body.fullUrl, async function (response) {
                 await ShortUrl.create({full: req.body.fullUrl, short: req.body.shortUrl});
                 console.log('SUCCESS')
-                return res.render('index', {"message":"URL successfully shortened: <a href=\"https://bhyi.tk/$(req.body.shortUrl)\">https://bhyi.tk/$(req.body.shortUrl)</a>."})
+                return res.render('index', {message:"URL successfully shortened: ", 'link': req.body.shortUrl})
             }).on('error', function(e) {
-                return res.render('index', {'message':'The URL is not valid.'})
+                return res.render('index', {'message':'The URL is not valid.', })
             });;
             }
         }

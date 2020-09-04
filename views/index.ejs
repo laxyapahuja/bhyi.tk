@@ -20,8 +20,8 @@
                 </div> 
                 <button type="submit">t k</button>
             </form>
-            <% if(locals.message){ %>
-                <h4 class = "message"><%= locals.message %>
+            <% if(locals.message && locals.link){ %>
+                <h4 class = "message"><%= locals.message  %> <a href="https://bhyi.tk/<%= locals.link %>">https://bhyi.tk/<%= link %></a> </h4>
             <% } %>
         </div>
         <h3 class="bottom">developed by <a href="https://laxya.co">laxyapahuja</a></h3>
