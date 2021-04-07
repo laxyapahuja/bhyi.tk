@@ -5,7 +5,7 @@ const fetch = require("node-fetch")
 const ShortUrl = require('./models/shortUrl')
 const bodyParser = require('body-parser')
 const app = express()
-const createAccountLimiter = require('./rateLimiter')
+const createAccountLimiter = require('./controllers/rateLimiter')
 
 mongoose.connect(process.env.DB_URL, {
     useNewUrlParser: true,
